@@ -6,15 +6,29 @@ print("starting...")
 start_time = time.time()
 print("loading images...")
 
+threshold = 64
+
+def transform(retina):
+    for i in range(0, len(retina)):
+        for j in range(0, len(retina[i])):
+            if retina[i][j] > threshold:
+                retina[i][j] = 1
+            else:
+                retina[i][j] = 0
+    return retina
+
 mndata = MNIST('.')
 training_images, training_labels = mndata.load_training()
 testing_images, testing_labels = mndata.load_testing()
 
+training_images = transform(training_images)
+testing_images = transform(testing_images)
+
 print("images loaded!")
 
 retina_length = 28*28
-num_bits_addr = 10
-bleaching = True
+num_bits_addr = 28
+bleaching = False
 
 w = WiSARD.WiSARD(num_bits_addr, bleaching)
 
